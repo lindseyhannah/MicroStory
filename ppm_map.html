@@ -11,9 +11,6 @@
     	body {background-color: Azure;}
     	h1 {color: MidnightBlue; padding: 10px}
     	p {color: MidnightBlue; padding: 5px;}
-
-
-
     </style>
 
 	<title>
@@ -28,11 +25,8 @@
 <Script>
 	/*WORKS!*/
 	function init() {
-
 	// Google Sheets "shareable link".  Not the Script API!!
-
 	var mp = "https://docs.google.com/spreadsheets/d/1hknDatO8Esw7YS4V75aFrnAIExdyEhokbttLRFhddYY/edit?usp=sharing";
-
     Tabletop.init( { key: mp,
                      callback: addPoints,
                      simpleSheet: true } );
@@ -41,7 +35,6 @@
 	
 window.addEventListener('DOMContentLoaded', init);
 var map = L.map("map").setView([48.75, -125.20], 7);
-
 // custom dark basemap
 var basemap = L.tileLayer("https://api.mapbox.com/styles/v1/lmhannah/cjxz1s2qa1d4q1cpy77g7ixbv/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibG1oYW5uYWgiLCJhIjoiY2pvNHYzNnZ4MDBuNjNxcHUwZzR3dmR5bSJ9.c2ULzGUVCYiPhkvdiqTRZw", {
 	attribution: '&copy;<a href="https://www.mapbox.com/about/maps/">Mapbox</a>, &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>  ',
@@ -50,11 +43,7 @@ var basemap = L.tileLayer("https://api.mapbox.com/styles/v1/lmhannah/cjxz1s2qa1d
 	scrollWheelZoom: 'false'
 });
 basemap.addTo(map);
-
-
-
 var pointGroupLayer;
-
   
 function addPoints(data) {
 	if (pointGroupLayer != null) {
@@ -62,32 +51,52 @@ function addPoints(data) {
 	}
 	pointGroupLayer = L.layerGroup().addTo(map);
  
-
-
 	for(var row = 0; row < data.length; row++) {
 		var rad;
 		var color;
 var ppm= (data[row].concentration_ppm)
-
 function getColor(ppm) {
 	//if (ppm <0.00001){
 		//return '#A3A4D6';}
 	if (ppm <0.00001){
 		return '#D8D8EE';}
-	if (ppm <0.0001){
+	if (ppm <0.001){
 		return '#A3A4D6';}
 	//if (ppm <0.01){
 		//return '#45489A';}
-	if (ppm <0.001){
-		return '#45489A';}
-	if (ppm <1){
-		return '#3D3F88';
+	//if (ppm <0.001){
+		//return '#45489A';}
+	if (ppm <.1){
+		return '#2D2F65';
 	}
-	if (ppm === "undefined"){
-		return 'white';
+	else{
+		return '#D8D8EE';
 	}
 	};
 	
+function getRadius(ppm) {
+	//if (ppm <0.00001){
+		//return '#A3A4D6';}
+	if (ppm <0.00001){
+		return '6';}
+	if (ppm <0.001){
+		return '10';}
+	if (ppm <0.1){
+		return '15';}
+	if (ppm === "undefined"){
+		return '0';
+	}
+	if (ppm === ""){
+		return '0';
+	}
+	if (isNaN(ppm)){
+		return '0';
+	}
+	else{
+		return '0'
+	}
+	};
+/*
 function getRadius(ppm){
 	if (ppm <= 0.00001) {
 		return '5';
@@ -118,7 +127,6 @@ function getOpac(ppm){
 		return '.6';
 	}
 }
-
 function getOutline(ppm){
 	if (ppm > 0) {
 		return 'true';
@@ -133,21 +141,26 @@ function getOutline(ppm){
 		return 'false'
 	}
 }
-*/	
+    	var legend= L.control({position: 'bottomleft'});
+    	legend.onAdd= function (map) {
+    		var div= L.DomUtil.create('div', 'infolegend'),
+    			grades= [0.00001, 0.0001, 0.001, 1],
+    			labels= [];
+    	    for (var i = 0; i < grades.length; i++) {
+       			 div.innerHTML +=
+            '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+   			 }
+    return div;
+};
+legend.addTo(map);
+ */   
     	var marker = L.circleMarker([data[row].lat, data[row].long], {radius: getRadius(ppm), fillOpacity: .7, color: getColor(ppm), fillColor: getColor(ppm)}).addTo(pointGroupLayer);
-      	marker.bindPopup(("<h2>"+ "Sample ID: " + data[row].sample_id + "<br>"+ "Sample Year: " + data[row].sample_year+ "<br>"+  "Microplastic Concentration is: " + data[row].concentration_ppm + " mg/L" + "</h2>"));
-
+      	marker.bindPopup(("<h2>"+ "Sample Year: " + data[row].sample_year+ "<br>"+ "Sample ID: " + data[row].sample_id + "<br>"+ "Microplastic Concentration is: " + data[row].concentration_ppm + " mg/L" + "</h2>"));
   	}
 }
-
 /*("<h2> Sample ID is: "+ data[row].sample_id + "<br>" + "<h2> Sample location is: "+ data[row].sample_location + "<br>" + "<h2> Microplastic Concentration is : " data[row].concentration_ppm + "<h2>" ppm+ "</h2");
 */
 </script>
 
-	
 
-
-
-
-</body>
-</html>
