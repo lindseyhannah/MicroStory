@@ -1,432 +1,150 @@
-
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>Microplastics</title>
-        
-<!-- 
+<head>
+	 <script src='https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.1/tabletop.min.js'></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"></script>
+   
 
-Sentra Template
 
-http://www.templatemo.com/tm-518-sentra
+<style>
+	#map {height: 99vh; background-color: grey;}
+	body {background-color: Azure;}
+	h1 {color: MidnightBlue; padding: 10px}
+	p {color: MidnightBlue; padding: 5px;}
 
--->
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+	#legend {
+		position: absolute;
+		z-index: 10000;
+		top: 60vh;
+		left: 2%;
+		height: 10px;
+}
 
-        <link rel="stylesheet" href="css/bootstrap.min.css">
-        <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-        <link rel="stylesheet" href="css/fontAwesome.css">
-        <link rel="stylesheet" href="css/light-box.css">
-        <link rel="stylesheet" href="css/owl-carousel.css">
-        <link rel="stylesheet" href="css/templatemo-style.css">
 
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
 
-        <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
-    </head>
+</style>
 
+	<title>
+    Leaflet
+	</title>
+</head>
 <body>
 
+	<div id= "map"> </div>
+	<div id= "legend"> 
+		<img src="leafLegend.png"alt="">
+
+	</div>
 
 
-        <header class="nav-down responsive-nav hidden-lg hidden-md">
-            <button type="button" id="nav-toggle" class="navbar-toggle" data-toggle="collapse" data-target="#main-nav">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <!--/.navbar-header-->
-            <div id="main-nav" class="collapse navbar-collapse">
-                <nav>
-                    <ul class="nav navbar-nav">
-                        <li><a href="#top">Home</a></li>
-                        <li><a href="#blog">Blog Entries</a></li>
-                        <li><a href="#featured">What are Microplastics?</a></li>
-                        <li><a href="#projects">Sampling</a></li>
-                        <li><a href="#video">Presentation</a></li>
-                        
-                        <li><a href="#contact">Contact Us</a></li>
-                    </ul>
-                </nav>
-            </div>
-        </header>
+<Script>
+	/*WORKS!*/
+	function init() {
 
-        <div class="sidebar-navigation hidde-sm hidden-xs">
-            <div class="logo">
-                <a>UW Tacoma </a>
-            </div>
-            <nav>
-                <ul>
-                    <li>
-                        <a href="#top">
-                            <span class="rect"></span>
-                            <span class="circle"></span>
-                            Home
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#blog">
-                            <span class="rect"></span>
-                            <span class="circle"></span>
-                            What are Microplastics?
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#featured">
-                            <span class="rect"></span>
-                            <span class="circle"></span>
-                            Measuring Microplastics
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#video">
-                            <span class="rect"></span>
-                            <span class="circle"></span>
-                            Learn More
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="#contact">
-                            <span class="rect"></span>
-                            <span class="circle"></span>
-                            Sample Results
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-            
-        </div>
+	// Google Sheets "shareable link".  Not the Script API!!
 
-        <div class="slider">
-            <div class="Modern-Slider content-section" id="top">
-               
-               
-                
-                <!-- // Item -->
-                <!-- Item -->
-                <div class="item item-3">
-                    <div class="img-fill">
-                        <div class="image"></div>
-                        <div class="info">
-                        <div>
-                          <h1>Microplastics in our<br>Marine Waters</h1>
-                          <p>What are they and why are they important?</p>
-                          
-                          
-                        </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- // Item -->
-            </div>
-        </div>
+	var mp = "https://docs.google.com/spreadsheets/d/1hknDatO8Esw7YS4V75aFrnAIExdyEhokbttLRFhddYY/edit?usp=sharing";
 
+    Tabletop.init( { key: mp,
+                     callback: addPoints,
+                     simpleSheet: true } );
+}
+                       // simpleSheet assumes there is only one table and automatically sends its data
+	
+window.addEventListener('DOMContentLoaded', init);
+var map = L.map("map").setView([48.75, -125.20], 7);
 
-        <div class="page-content">
-
-              <section id="blog" class="content-section">
-                <div class="section-heading">
-                    <h1>What are<br><em>Microplastics?</em></h1>
-                    <p> 
-                    <br>.</p>
-                </div>
-                <div class="section-content">
-                    <div class="tabs-content">
-                        <div class="wrapper">
-                            
-                            <section id="first-tab-group" class="tabgroup">
-                                <div id="tab1">
-                                    <ul>
-                                        <li>
-                                            <div class="item">
-                                                <img src="img/pencil.jpg" alt="">
-                                                <div class="text-content">
-                                                    <h4>What are Microplastics?</h4>
-                                                    
-                                                    <p>Microplastics are tiny plastic particles that are 5mm or less in size. That's about the size of a pencil eraser or smaller. Due to their small size, they're hard to see and hard to detect. Microplastics come from several different sources and can be a major pollutant in fresh and saltwater environments.  </p>
-                                                    
-                                                    
-                                                </div>
-                                                <br>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="item">
-                                                <img src="img/beach1.jpg" alt="">
-                                                <div class="text-content">
-                                                    <h4>Where do Microplastics come from?</h4>
-                                                    
-                                                    <p>Microplastics are either manufactured at small sizes for commerical or consumer use- such as microbeads in soap or toothpaste- or they can be formed by the breakdown of larger pieces of plastic over time. These plastic particles end up in water bodies through runoff, wastewater effluent, littering, and other processes. </p>
-                                                    
-                                                
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="item">
-                                                <img src="img/vial.jpg" alt="">
-                                                <div class="text-content">
-                                                    <h4>Why do they matter?</h4>
-                                                    
-                                                    <p>Many of the things we use everyday are made out of plastic and plastic is a material that is designed to be durable and avoid breaking down. Millions of tons of plastic are produced each year for consumer and industrial use. One study estimates that 10% of all manufactured plastic evetually ends up in marine environments through various channels. Due to its durability, when plastic ends up in our oceans and lakes, it can persist there for decades, if not centuries. <br><br>
-
-                                                     Plastics can cause harm to the living organisms living in our oceans. Microplastics have been found in the stomaches and tissues of fish, mollusks, invertebrates and other sea creatures. These plastic particles can cause blockages in the digestive system, or change typical feeding behaviors when ingested. Plastics can also leach harmful chemicals as they breakdown. </p>
-                                                    
-                                                    
-                                                </div>
-                                            </div>
-                                        </li>
-                                               <li>
-                                            <div class="item">
-                                                <img src="img/anothersample.jpg" alt="">
-                                                <div class="text-content">
-                                                    <h4>Why should we study microplastics?</h4>
-                                                    
-                                                    <p>While we have studied the negative effects of large plastic pieces in our oceans for several decades, we have only really just started to measure and study the concentrations and effects of microplastics in these same areas. We need more data to assess how these particles are affecting our ecosystems and food chain.  <br><br>  UW Tacoma has a robust microplastic sampling program to study the concentrations of these particles in the Salish Sea area. This research is made possible with the help of interested citizen science groups, students, and other community partners.    </p>
-                                                    
-                                                
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                                
-                            </section> 
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <section id="featured" class="content-section">
-                <div class="section-heading">
-                    <h1>How do we measure<br><em>Microplastics?</em></h1>
-                    
-                </div>
-                <div class="section-content">
-                    <div class="owl-carousel owl-theme">
-                        <div class="item">
-                            <div class="image">
-                                <img src="img/training.jpeg" alt="">
-                                <div class="featured-button button">
-                                   
-                                </div>
-                            </div>
-                            <div class="text-content">
-                                <h4>Sample planning and training</h4>
-                               
-                                <p>UWT relies on the contributions of both research scientists as well as students and trained citizens. All participants are trained in the proper ways to record, collect and handle samples. Together,scientists and partners have collected and analyzed hundreds of samples </p>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="image">
-                                <img src="img/manta1.jpeg" alt="">
-                                <div class="featured-button button">
-                                    
-                                </div>
-                            </div>
-                            <div class="text-content">
-                                <h4>Preparing for Sampling</h4>
-                                
-                                <p>To collect water samples, research participants use a special net designed to capture particles the size of microplastics. This net is towed behind a boat, collecting any particles from the top of the water column. </p>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="image">
-                                <img src="img/manta.jpeg" alt="">
-                                <div class="featured-button button">
-                                
-                                </div>
-                            </div>
-                            <div class="text-content">
-                                <h4>Sampling</h4>
-                                
-                                <p> The net is towed for 5-15 minutes, depending on boat speed. All material larger than the target miscroplastic particle size are collected in the net as water passes through. </p>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="image">
-                                <img src="img/data.jpeg" alt="">
-                                <div class="featured-button button">
-                                    
-                                </div>
-                            </div>
-                            <div class="text-content">
-                                <h4>Recording</h4>
-                                
-                                <p>While the sample is being collected, participants record some key data about the sample, including the sample number, geographic location it was taken, the speed of the boat and how much water passed through the net. </p>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="image">
-                                <img src="img/filter.jpeg" alt="">
-                                <div class="featured-button button">
-                                 
-                                </div>
-                            </div>
-                            <div class="text-content">
-                                <h4>Sieving</h4>
-                               
-                                <p>Once the sample is collected, the net is pulled back onto the boat. Its contents are emptied into a sieve and participants sort the contents of the sample by size. The collected matter that is too large is discarded.  </p>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="image">
-                                <img src="img/samplevial.jpeg" alt="">
-                                <div class="featured-button button">
-                                  
-                                </div>
-                            </div>
-                            <div class="text-content">
-                                <h4>Ready for processing</h4>
-                               
-                                <p>The sample at this point is full of tiny organic and inorganic matter, some of which might be microplastics.  The sample is taken to a laboratory at UW Tacoma for further processing.</p>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="image">
-                                <img src="img/inbetween.jpeg" alt="">
-                                <div class="featured-button button">
-                                  
-                                </div>
-                            </div>
-                            <div class="text-content">
-                                <h4>Processing the Sample</h4>
-                                
-                                <p>In the lab researchers seperate the sample contents based on density and then process the sample to remove organic material. Researchers then look at the sample under a microscope and individually sort and seperate any plastic pieces. The plastic is weighed to determine the total mass of the microplastic that was collected. </p>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="image">
-                                <img src="img/looking1.jpeg" alt="">
-                                <div class="featured-button button">
-                                    
-                                </div>
-                            </div>
-                            <div class="text-content">
-                                <h4>Results</h4>
-                              
-                                <p>Based on the total mass of the plastic in the sample, and the volume of water that passed through the net during sampling, scientists can determine the concentration of microplastics. They measure this in mg/L, or ppm (parts per million). This concentration represents the average concentration of microplastics found in the area sampled. </p>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="image">
-                                <img src="img/netpull.jpeg" alt="">
-                                <div class="featured-button button">
-                                    
-                                </div>
-                            </div>
-                            <div class="text-content">
-                                <h4>Continuous Monitoring</h4>
-                                
-                                <p>We still have a lot to learn about how much microplastics are in our water and what effects it has on our ecosystems. Its necessary to collect and analyze samples often to measure concentrations, track trends and gain more knowledge about these tiny particles in our waters.   </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-          
-            <section id="video" class="content-section">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="section-heading">
-                            <h1>Want to know more about the research?</h1>
-                            <p>Watch this short video to learn more about the University of Washington's<br>microplastic sampling program in partnership with the Center for Urban Water.</p>
-                        </div>
-                      
-                        
-                    </div>
-                    <div class="col-md-12">
-                        <div class="box-video">
-                            <div class="video-container">
-                                <iframe width="560" height="315" src="https://www.youtube.com/embed/ySP3LOUYmak" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                            </div>
-                        </div>
-                    </div>
-                </div>     
-                <br>
-                <br>
-
-            </section>
-          
-            <section id="contact" class="content-section">
-               <div class="section-heading">
-                    <br><br>
-                    <h1 style= "padding-left: 6%">   Sample Collection and Analaysis    <br><em>     Results</em></h1>
-                    <h5 style= "padding-left: 6%; padding-right: 5%"> Continued efforts by researchers and local partners to collect and analyze samples is critical to understand the effect of microplastics in our local environment. The UWT Microplastic Reseach Group has been sampling around the Salish Sea since 2010. Samples collected to date are shown below. 
-                    </h5>
-                </div>
-
-                <div id="map">
-                	
-                    <iframe src="ppm_map.html" width="90%" height="560px" frameborder="0" style="border:0" allowfullscreen></iframe>
-                </div>
-                <br>
-                <br>
-                    
-               
-            </section>
-            <section class="footer">
-                <p>Copyright &copy; 2018. Design: <a href="http://templatemo.com/tm-518-sentra" target="_blank">Sentra</a> | Distribution: <a href="https://themewagon.com" target="_blank">ThemeWagon</a></p>
-            </section>
-        </div>
+// custom dark basemap
+var basemap = L.tileLayer("https://api.mapbox.com/styles/v1/lmhannah/cjxz1s2qa1d4q1cpy77g7ixbv/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibG1oYW5uYWgiLCJhIjoiY2pvNHYzNnZ4MDBuNjNxcHUwZzR3dmR5bSJ9.c2ULzGUVCYiPhkvdiqTRZw", {
+	attribution: '&copy;<a href="https://www.mapbox.com/about/maps/">Mapbox</a>, &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>  ',
+	subdomains: "abcd",
+	maxZoom: 19,
+	scrollWheelZoom: 'false'
+});
+basemap.addTo(map);
 
 
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
+var pointGroupLayer;
 
-    <script src="js/vendor/bootstrap.min.js"></script>
-    
-    <script src="js/plugins.js"></script>
-    <script src="js/main.js"></script>
 
-    <script>
-        // Hide Header on on scroll down
-        var didScroll;
-        var lastScrollTop = 0;
-        var delta = 5;
-        var navbarHeight = $('header').outerHeight();
+  
+function addPoints(data) {
+	if (pointGroupLayer != null) {
+		pointGroupLayer.remove();
+	}
+	pointGroupLayer = L.layerGroup().addTo(map);
+ 	
 
-        $(window).scroll(function(event){
-            didScroll = true;
-        });
+	for(var row = 0; row < data.length; row++) {
 
-        setInterval(function() {
-            if (didScroll) {
-                hasScrolled();
-                didScroll = false;
-            }
-        }, 250);
 
-        function hasScrolled() {
-            var st = $(this).scrollTop();
-            
-            // Make sure they scroll more than delta
-            if(Math.abs(lastScrollTop - st) <= delta)
-                return;
-            
-            // If they scrolled down and are past the navbar, add class .nav-up.
-            // This is necessary so you never see what is "behind" the navbar.
-            if (st > lastScrollTop && st > navbarHeight){
-                // Scroll Down
-                $('header').removeClass('nav-down').addClass('nav-up');
-            } else {
-                // Scroll Up
-                if(st + $(window).height() < $(document).height()) {
-                    $('header').removeClass('nav-up').addClass('nav-down');
-                }
-            }
-            
-            lastScrollTop = st;
-        }
-    </script>
+		var ppm= (data[row].concentration_ppm)
 
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript"></script>
+	
+
+ 		
+function getColor(ppm) {
+	//if (ppm <0.00001){
+		//return '#A3A4D6';}
+	if (ppm <0.00001){
+		return '#D8D8EE';}
+	if (ppm <0.001){
+		return '#A3A4D6';}
+	//if (ppm <0.01){
+		//return '#45489A';}
+	//if (ppm <0.001){
+		//return '#45489A';}
+	if (ppm <.1){
+		return '#2D2F65';
+	}
+	else{
+		return '#D8D8EE';
+	}
+	};
+
+	
+function getRadius(ppm) {
+	//if (ppm <0.00001){
+		//return '#A3A4D6';}
+	if (ppm <0.00001){
+		return '6';}
+	if (ppm <0.001){
+		return '10';}
+	if (ppm <0.1){
+		return '15';}
+	if (ppm === "undefined"){
+		return '0';
+	}
+	if (ppm === ""){
+		return '0';
+	}
+	if (isNaN(ppm)){
+		return '0';
+	}
+	else{
+		return '0'
+	}
+	};
+
+ 		
+
+    	var marker = L.circleMarker([data[row].lat, data[row].long], {radius: getRadius(ppm), fillOpacity: .7, color: getColor(ppm), fillColor: getColor(ppm)}).addTo(pointGroupLayer);
+
+      	marker.bindPopup(("<h2>"+ "Sample Year: " + data[row].sample_year+ "<br>"+ "Sample ID: " + data[row].sample_id + "<br>"+ "Microplastic Concentration is: " + data[row].concentration_ppm + " mg/L" + "</h2>"));
+
+  	}
+
+} 
+
+
+</script>
+
+	
+
+
+
 
 </body>
 </html>
