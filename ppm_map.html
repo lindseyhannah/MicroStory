@@ -4,26 +4,17 @@
 	 <script src='https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.1/tabletop.min.js'></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"/>
     <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"></script>
-   
 
 
-<style>
-	#map {height: 99vh; background-color: grey;}
-	body {background-color: Azure;}
-	h1 {color: MidnightBlue; padding: 10px}
-	p {color: MidnightBlue; padding: 5px;}
-
-	#legend {
-		position: absolute;
-		z-index: 10000;
-		top: 60vh;
-		left: 2%;
-		height: 10px;
-}
+    <style>
+    	#map {height: 99vh; background-color: grey;}
+    	body {background-color: Azure;}
+    	h1 {color: MidnightBlue; padding: 10px}
+    	p {color: MidnightBlue; padding: 5px;}
 
 
 
-</style>
+    </style>
 
 	<title>
     Leaflet
@@ -32,10 +23,6 @@
 <body>
 
 	<div id= "map"> </div>
-	<div id= "legend"> 
-		<img src="leafLegend.png"alt="">
-
-	</div>
 
 
 <Script>
@@ -68,77 +55,93 @@ basemap.addTo(map);
 
 var pointGroupLayer;
 
-
   
 function addPoints(data) {
 	if (pointGroupLayer != null) {
 		pointGroupLayer.remove();
 	}
 	pointGroupLayer = L.layerGroup().addTo(map);
- 	
+ 
+
 
 	for(var row = 0; row < data.length; row++) {
+		var rad;
+		var color;
+var ppm= (data[row].concentration_ppm)
 
-
-		var ppm= (data[row].concentration_ppm)
-
-	
-
- 		
 function getColor(ppm) {
 	//if (ppm <0.00001){
 		//return '#A3A4D6';}
 	if (ppm <0.00001){
 		return '#D8D8EE';}
-	if (ppm <0.001){
+	if (ppm <0.0001){
 		return '#A3A4D6';}
 	//if (ppm <0.01){
 		//return '#45489A';}
-	//if (ppm <0.001){
-		//return '#45489A';}
-	if (ppm <.1){
-		return '#2D2F65';
-	}
-	else{
-		return '#D8D8EE';
-	}
-	};
-
-	
-function getRadius(ppm) {
-	//if (ppm <0.00001){
-		//return '#A3A4D6';}
-	if (ppm <0.00001){
-		return '6';}
 	if (ppm <0.001){
-		return '10';}
-	if (ppm <0.1){
-		return '15';}
+		return '#45489A';}
+	if (ppm <1){
+		return '#3D3F88';
+	}
 	if (ppm === "undefined"){
-		return '0';
-	}
-	if (ppm === ""){
-		return '0';
-	}
-	if (isNaN(ppm)){
-		return '0';
-	}
-	else{
-		return '0'
+		return 'white';
 	}
 	};
+	
+function getRadius(ppm){
+	if (ppm <= 0.00001) {
+		return '5';
+		};
+	//if (ppm <0.0001){
+	//	return '5';
+		//	} 
+	if (ppm <0.0001){
+		return '7'	
+		;} 
+	if (ppm <.001){
+		return '9';
+	}
+	if (ppm <1){
+		return '12';
+	}
+	
+	else{
+		return '0';
+	}
+}
+/*
+function getOpac(ppm){
+	if(ppm == 0) {
+		return '0'
+	;}
+	else {
+		return '.6';
+	}
+}
 
- 		
-
+function getOutline(ppm){
+	if (ppm > 0) {
+		return 'true';
+	}
+	if (isNaN(ppm)== true){
+		return 'false'
+	}
+	if (ppm ===0) {
+		return 'false';
+	}
+	else{
+		return 'false'
+	}
+}
+*/	
     	var marker = L.circleMarker([data[row].lat, data[row].long], {radius: getRadius(ppm), fillOpacity: .7, color: getColor(ppm), fillColor: getColor(ppm)}).addTo(pointGroupLayer);
-
-      	marker.bindPopup(("<h2>"+ "Sample Year: " + data[row].sample_year+ "<br>"+ "Sample ID: " + data[row].sample_id + "<br>"+ "Microplastic Concentration is: " + data[row].concentration_ppm + " mg/L" + "</h2>"));
+      	marker.bindPopup(("<h2>"+ "Sample ID: " + data[row].sample_id + "<br>"+ "Sample Year: " + data[row].sample_year+ "<br>"+  "Microplastic Concentration is: " + data[row].concentration_ppm + " mg/L" + "</h2>"));
 
   	}
+}
 
-} 
-
-
+/*("<h2> Sample ID is: "+ data[row].sample_id + "<br>" + "<h2> Sample location is: "+ data[row].sample_location + "<br>" + "<h2> Microplastic Concentration is : " data[row].concentration_ppm + "<h2>" ppm+ "</h2");
+*/
 </script>
 
 	
